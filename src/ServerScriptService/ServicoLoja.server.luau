@@ -80,6 +80,7 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 	end)
 
 	if sucesso then
+		player:LoadCharacter()
 		return Enum.ProductPurchaseDecision.PurchaseGranted
 	else
 		warn("Falha ao salvar a compra do jogador " .. player.Name .. ". Tentando novamente depois.")

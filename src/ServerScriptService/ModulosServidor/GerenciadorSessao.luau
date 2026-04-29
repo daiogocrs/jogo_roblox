@@ -2,7 +2,11 @@ local GerenciadorSessao = {}
 GerenciadorSessao.DadosAtuais = {}
 
 function GerenciadorSessao.Obter(userId)
-	return GerenciadorSessao.DadosAtuais[userId]
+	local dados = GerenciadorSessao.DadosAtuais[userId]
+	if dados then
+		return table.clone(dados)
+	end
+	return nil
 end
 
 function GerenciadorSessao.Definir(userId, novosDados)

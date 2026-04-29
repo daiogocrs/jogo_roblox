@@ -1,12 +1,14 @@
 local player = game.Players.LocalPlayer
 local MarketplaceService = game:GetService("MarketplaceService")
 local UserInputService = game:GetService("UserInputService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
--- COLOQUE OS SEUS IDs AQUI!
-local ID_ROLETAR_NOME = 3582506122
-local ID_ROLETAR_RACA = 3582506121
+local ConfigGerais = require(ReplicatedStorage:WaitForChild("ModulosCompartilhados"):WaitForChild("ConfigGerais"))
 
--- Paineis
+local ID_ROLETAR_NOME = ConfigGerais.ID_ROLETAR_NOME
+local ID_ROLETAR_RACA = ConfigGerais.ID_ROLETAR_RACA
+
+-- Paineis 
 local painelOpcoes = script.Parent:WaitForChild("PainelOpcoes")
 local painelGamepasses = script.Parent:WaitForChild("PainelGamepasses")
 local painelStatus = script.Parent:WaitForChild("PainelStatus")

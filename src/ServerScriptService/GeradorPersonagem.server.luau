@@ -87,6 +87,20 @@ Players.PlayerAdded:Connect(function(player)
 	raca.Value = "Humano"
 	raca.Parent = dadosOcultos
 
+	local function sincronizarSessao(nomeTag, valor)
+		local dadosSessao = GerenciadorSessao.Obter(player.UserId)
+		if dadosSessao then
+			dadosSessao[nomeTag] = valor
+			GerenciadorSessao.Definir(player.UserId, dadosSessao)
+		end
+	end
+
+	for _, tag in ipairs(dadosOcultos:GetChildren()) do
+		tag.Changed:Connect(function()
+			sincronizarSessao(tag.Name, tag.Value)
+		end)
+	end
+
 	player.CharacterAdded:Connect(function(character)
 		local dadosLocais = GerenciadorSessao.Obter(player.UserId)
 
