@@ -1,0 +1,4 @@
+# Ignorar ficheiros do Roblox e Rojo que não precisam de ir para o GitHub
+*.rbxl
+*.rbxlx
+.rojo_ui/
