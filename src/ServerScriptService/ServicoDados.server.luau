@@ -1,34 +1,69 @@
 local Players = game:GetService("Players")
-local DataStoreService = game:GetService("DataStoreService")
-local PersonagensDS = DataStoreService:GetDataStore("DadosJogadores_V1")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local ProfileService = require(ReplicatedStorage:WaitForChild("Packages"):WaitForChild("ProfileService"))
 local GerenciadorSessao = require(script.Parent:WaitForChild("ModulosServidor"):WaitForChild("GerenciadorSessao"))
 
-Players.PlayerAdded:Connect(function(player)
-	local chaveDS = tostring(player.UserId)
-	local sucesso, dados = pcall(function() return PersonagensDS:GetAsync(chaveDS) end)
+local TemplateDados = {
+	Nome = "Desconhecido",
+	Genero = "Masculino",
+	Cabelo = 0,
+	Camisa = 0,
+	Calca = 0,
+	Raca = "Humano",
+	CorPele = "#EEC196",
+	Nivel = 1,
+	XP = 0,
+	XPMaximo = 100,
+}
 
-	if sucesso and dados then
-		GerenciadorSessao.Definir(player.UserId, dados)
+local ProfileStore = ProfileService.GetProfileStore("DadosJogadores_V2", TemplateDados)
+
+local Profiles = {}
+
+local function PlayerAdded(player)
+	local profile = ProfileStore:LoadProfileAsync("Player_" .. player.UserId)
+
+	if profile ~= nil then
+		profile:AddUserId(player.UserId)
+		profile:Reconcile()
+
+		profile:ListenToRelease(function()
+			Profiles[player] = nil
+			player:Kick("Seus dados foram carregados em outro servidor. Por favor, reconecte.")
+		end)
+
+		if player:IsDescendantOf(Players) then
+			Profiles[player] = profile
+			GerenciadorSessao.Definir(player.UserId, profile.Data)
+		else
+			profile:Release()
+		end
 	else
-		GerenciadorSessao.Definir(player.UserId, nil) 
+		player:Kick("Não foi possível carregar seus dados. Tente novamente.")
 	end
-end)
+end
+
+Players.PlayerAdded:Connect(PlayerAdded)
 
 Players.PlayerRemoving:Connect(function(player)
-	local dadosLocais = GerenciadorSessao.Obter(player.UserId)
-	if dadosLocais then
-		pcall(function() PersonagensDS:SetAsync(tostring(player.UserId), dadosLocais) end)
+	local profile = Profiles[player]
+	if profile then
+		local dadosAtuais = GerenciadorSessao.Obter(player.UserId)
+		if dadosAtuais then
+			profile.Data = dadosAtuais
+		end
+		profile:Release()
 	end
 	GerenciadorSessao.Remover(player.UserId)
 end)
 
-game:BindToClose(function()
-	for _, player in ipairs(Players:GetPlayers()) do
-		local dadosLocais = GerenciadorSessao.Obter(player.UserId)
-		if dadosLocais then
-			pcall(function() PersonagensDS:SetAsync(tostring(player.UserId), dadosLocais) end)
-		end
+local function WipeAccount(player)
+	local profile = Profiles[player]
+	if profile then
+		profile:Release()
+		Profiles[player] = nil
+		ProfileStore:WipeProfileAsync("Player_" .. player.UserId)
 	end
-	task.wait(2) 
-end)
+end
+_G.WipeAccount = WipeAccount

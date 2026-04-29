@@ -1,7 +1,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local DataStoreService = game:GetService("DataStoreService")
-local PersonagensDS = DataStoreService:GetDataStore("DadosJogadores_V1")
+local ProfileService = require(ReplicatedStorage.Packages.ProfileService)
+local Promise = require(ReplicatedStorage:WaitForChild("Packages"):WaitForChild("Promise"))
 
 local ConfigGerais = require(ReplicatedStorage:WaitForChild("ModulosCompartilhados"):WaitForChild("ConfigGerais"))
 local GerenciadorSessao = require(script.Parent:WaitForChild("ModulosServidor"):WaitForChild("GerenciadorSessao"))
@@ -141,10 +141,17 @@ Players.PlayerAdded:Connect(function(player)
 			description.LeftLegColor = corTransformada
 			description.RightLegColor = corTransformada
 
-			pcall(function()
+			Promise.try(function()
 				humanoid:ApplyDescription(description)
 			end)
-			atualizarStatus(player)
+				:andThen(function()
+					print("Aparência de", player.Name, "carregada com sucesso!")
+					atualizarStatus(player)
+				end)
+				:catch(function(erro)
+					warn("Falha ao carregar aparência, o Roblox pode estar com instabilidade:", erro)
+					atualizarStatus(player)
+				end)
 		end
 	end)
 end)
@@ -165,10 +172,10 @@ eventoMenu.OnServerEvent:Connect(function(player, acao)
 end)
 
 eventoDeletar.OnServerEvent:Connect(function(player)
-	local chaveDS = tostring(player.UserId)
-	pcall(function()
-		PersonagensDS:RemoveAsync(chaveDS)
-	end)
+	if _G.WipeAccount then
+		_G.WipeAccount(player)
+	end
+
 	GerenciadorSessao.Remover(player.UserId)
 
 	local tagNome = player:FindFirstChild("NomeFalso")
@@ -239,9 +246,6 @@ eventoEscolha.OnServerEvent:Connect(function(player, genero)
 	}
 
 	GerenciadorSessao.Definir(player.UserId, dadosPersonagem)
-	pcall(function()
-		PersonagensDS:SetAsync(tostring(player.UserId), dadosPersonagem)
-	end)
 
 	player:LoadCharacter()
 end)
