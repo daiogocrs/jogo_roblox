@@ -10,6 +10,19 @@
             "className": "ReplicatedStorage",
             "children": [
                 {
+                    "name": "ModulosCompartilhados",
+                    "className": "Folder",
+                    "children": [
+                        {
+                            "name": "ConfigGerais",
+                            "className": "ModuleScript",
+                            "filePaths": [
+                                "src/ReplicatedStorage/ModulosCompartilhados/ConfigGerais.luau"
+                            ]
+                        }
+                    ]
+                },
+                {
                     "name": "MenuPrincipal",
                     "className": "ScreenGui",
                     "filePaths": [
@@ -26,14 +39,85 @@
                     ]
                 },
                 {
-                    "name": "ModulosCompartilhados",
+                    "name": "Packages",
                     "className": "Folder",
                     "children": [
                         {
-                            "name": "ConfigGerais",
+                            "name": "GoodSignal",
                             "className": "ModuleScript",
                             "filePaths": [
-                                "src/ReplicatedStorage/ModulosCompartilhados/ConfigGerais.luau"
+                                "Packages/GoodSignal.lua"
+                            ]
+                        },
+                        {
+                            "name": "ProfileService",
+                            "className": "ModuleScript",
+                            "filePaths": [
+                                "Packages/ProfileService.lua"
+                            ]
+                        },
+                        {
+                            "name": "Promise",
+                            "className": "ModuleScript",
+                            "filePaths": [
+                                "Packages/Promise.lua"
+                            ]
+                        },
+                        {
+                            "name": "_Index",
+                            "className": "Folder",
+                            "children": [
+                                {
+                                    "name": "brittonfischer_profileservice@2.1.5",
+                                    "className": "Folder",
+                                    "children": [
+                                        {
+                                            "name": "profileservice",
+                                            "className": "ModuleScript",
+                                            "filePaths": [
+                                                "Packages/_Index/brittonfischer_profileservice@2.1.5/profileservice/src/init.lua",
+                                                "Packages/_Index/brittonfischer_profileservice@2.1.5/profileservice/default.project.json"
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "evaera_promise@4.0.0",
+                                    "className": "Folder",
+                                    "children": [
+                                        {
+                                            "name": "promise",
+                                            "className": "ModuleScript",
+                                            "filePaths": [
+                                                "Packages/_Index/evaera_promise@4.0.0/promise/lib/init.lua",
+                                                "Packages/_Index/evaera_promise@4.0.0/promise/default.project.json"
+                                            ],
+                                            "children": [
+                                                {
+                                                    "name": "init.spec",
+                                                    "className": "ModuleScript",
+                                                    "filePaths": [
+                                                        "Packages/_Index/evaera_promise@4.0.0/promise/lib/init.spec.lua"
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "stravant_goodsignal@0.2.1",
+                                    "className": "Folder",
+                                    "children": [
+                                        {
+                                            "name": "goodsignal",
+                                            "className": "ModuleScript",
+                                            "filePaths": [
+                                                "Packages/_Index/stravant_goodsignal@0.2.1/goodsignal/src/init.lua",
+                                                "Packages/_Index/stravant_goodsignal@0.2.1/goodsignal/default.project.json"
+                                            ]
+                                        }
+                                    ]
+                                }
                             ]
                         }
                     ]
@@ -44,20 +128,6 @@
             "name": "ServerScriptService",
             "className": "ServerScriptService",
             "children": [
-                {
-                    "name": "GeradorPersonagem",
-                    "className": "Script",
-                    "filePaths": [
-                        "src/ServerScriptService/GeradorPersonagem.server.luau"
-                    ]
-                },
-                {
-                    "name": "GerenciadorEnergia",
-                    "className": "Script",
-                    "filePaths": [
-                        "src/ServerScriptService/GerenciadorEnergia.server.luau"
-                    ]
-                },
                 {
                     "name": "ModulosServidor",
                     "className": "Folder",
@@ -76,6 +146,20 @@
                                 "src/ServerScriptService/ModulosServidor/StatusMath.luau"
                             ]
                         }
+                    ]
+                },
+                {
+                    "name": "GeradorPersonagem",
+                    "className": "Script",
+                    "filePaths": [
+                        "src/ServerScriptService/GeradorPersonagem.server.luau"
+                    ]
+                },
+                {
+                    "name": "GerenciadorEnergia",
+                    "className": "Script",
+                    "filePaths": [
+                        "src/ServerScriptService/GerenciadorEnergia.server.luau"
                     ]
                 },
                 {
@@ -132,17 +216,17 @@
                     "className": "StarterCharacterScripts",
                     "children": [
                         {
-                            "name": "Movimentacao",
-                            "className": "LocalScript",
-                            "filePaths": [
-                                "src/StarterPlayer/StarterCharacterScripts/Movimentacao.client.luau"
-                            ]
-                        },
-                        {
                             "name": "SistemaCombateClient",
                             "className": "LocalScript",
                             "filePaths": [
                                 "src/StarterPlayer/StarterCharacterScripts/SistemaCombateClient.client.luau"
+                            ]
+                        },
+                        {
+                            "name": "Movimentacao",
+                            "className": "LocalScript",
+                            "filePaths": [
+                                "src/StarterPlayer/StarterCharacterScripts/Movimentacao.client.luau"
                             ]
                         }
                     ]
@@ -152,17 +236,17 @@
                     "className": "StarterPlayerScripts",
                     "children": [
                         {
-                            "name": "IniciadorMenu",
-                            "className": "LocalScript",
-                            "filePaths": [
-                                "src/StarterPlayer/StarterPlayerScripts/IniciadorMenu.client.luau"
-                            ]
-                        },
-                        {
                             "name": "LocalScript",
                             "className": "LocalScript",
                             "filePaths": [
                                 "src/StarterPlayer/StarterPlayerScripts/LocalScript.client.luau"
+                            ]
+                        },
+                        {
+                            "name": "IniciadorMenu",
+                            "className": "LocalScript",
+                            "filePaths": [
+                                "src/StarterPlayer/StarterPlayerScripts/IniciadorMenu.client.luau"
                             ]
                         }
                     ]

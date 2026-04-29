@@ -37,7 +37,6 @@ end
 -- CARREGAMENTO DO BONECO
 -- ==========================================
 Players.PlayerAdded:Connect(function(player)
-
 	local dadosOcultos = Instance.new("Folder")
 	dadosOcultos.Name = "dadosOcultos"
 	dadosOcultos.Parent = player
@@ -109,13 +108,24 @@ Players.PlayerAdded:Connect(function(player)
 			task.wait(0.3)
 
 			humanoid.DisplayName = dadosLocais.Nome
-			local tagNome = player:FindFirstChild("NomeFalso") or Instance.new("StringValue", player)
+			local tagNome = player:FindFirstChild("NomeFalso") or Instance.new("StringValue")
 			tagNome.Name = "NomeFalso"
 			tagNome.Value = dadosLocais.Nome
+			tagNome.Parent = player
 
 			local tagRaca = dadosOcultos:FindFirstChild("Raca")
 			if tagRaca then
 				tagRaca.Value = dadosLocais.Raca
+			end
+
+			if dadosLocais.Nivel then
+				dadosOcultos.Nivel.Value = dadosLocais.Nivel
+			end
+			if dadosLocais.XP then
+				dadosOcultos.XP.Value = dadosLocais.XP
+			end
+			if dadosLocais.XPMaximo then
+				dadosOcultos.XPMaximo.Value = dadosLocais.XPMaximo
 			end
 
 			local description = Instance.new("HumanoidDescription")
@@ -223,6 +233,9 @@ eventoEscolha.OnServerEvent:Connect(function(player, genero)
 		Calca = ConfigGerais.idsCalca[math.random(1, #ConfigGerais.idsCalca)],
 		Raca = ConfigGerais.sortearRaca(),
 		CorPele = ConfigGerais.coresPeleHex[math.random(1, #ConfigGerais.coresPeleHex)],
+		Nivel = 1,
+		XP = 0,
+		XPMaximo = 100,
 	}
 
 	GerenciadorSessao.Definir(player.UserId, dadosPersonagem)

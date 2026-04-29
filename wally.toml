@@ -1,7 +1,10 @@
 [package]
-name = "daiogo/jogo_roblox"
+name = "daiogo/jogo-roblox"
 version = "0.1.0"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
 [dependencies]
+ProfileService = "brittonfischer/profileservice@2.1.5"
+Promise = "evaera/promise@4.0.0"
+GoodSignal = "stravant/goodsignal@0.2.1"
