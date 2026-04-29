@@ -22,7 +22,9 @@ local function atualizarStatus(player)
 		dados.DanoBase.Value = atributos.danoBase
 		dados.EnergiaMaxima.Value = atributos.energiaMaxima
 		dados.Agilidade.Value = atributos.agilidade
-		if dados:FindFirstChild("EnergiaAtual") then dados.EnergiaAtual.Value = atributos.energiaMaxima end
+		if dados:FindFirstChild("EnergiaAtual") then
+			dados.EnergiaAtual.Value = atributos.energiaMaxima
+		end
 
 		local humanoid = character.Humanoid
 		humanoid.MaxHealth = atributos.vidaMaxima
@@ -35,19 +37,55 @@ end
 -- CARREGAMENTO DO BONECO
 -- ==========================================
 Players.PlayerAdded:Connect(function(player)
+
 	local dadosOcultos = Instance.new("Folder")
 	dadosOcultos.Name = "dadosOcultos"
 	dadosOcultos.Parent = player
 
-	local nivel = Instance.new("IntValue", dadosOcultos); nivel.Name = "Nivel"; nivel.Value = 1
-	local xp = Instance.new("IntValue", dadosOcultos); xp.Name = "XP"; xp.Value = 0
-	local xpMaximo = Instance.new("IntValue", dadosOcultos); xpMaximo.Name = "XPMaximo"; xpMaximo.Value = 100
-	local vidaMaxima = Instance.new("IntValue", dadosOcultos); vidaMaxima.Name = "VidaMaxima"; vidaMaxima.Value = 100
-	local danoBase = Instance.new("IntValue", dadosOcultos); danoBase.Name = "DanoBase"; danoBase.Value = 5
-	local energiaMaxima = Instance.new("IntValue", dadosOcultos); energiaMaxima.Name = "EnergiaMaxima"; energiaMaxima.Value = 100
-	local energiaAtual = Instance.new("IntValue", dadosOcultos); energiaAtual.Name = "EnergiaAtual"; energiaAtual.Value = 100
-	local agilidade = Instance.new("IntValue", dadosOcultos); agilidade.Name = "Agilidade"; agilidade.Value = 16
-	local raca = Instance.new("StringValue", dadosOcultos); raca.Name = "Raca"; raca.Value = "Humano"
+	local nivel = Instance.new("IntValue")
+	nivel.Name = "Nivel"
+	nivel.Value = 1
+	nivel.Parent = dadosOcultos
+
+	local xp = Instance.new("IntValue")
+	xp.Name = "XP"
+	xp.Value = 0
+	xp.Parent = dadosOcultos
+
+	local xpMaximo = Instance.new("IntValue")
+	xpMaximo.Name = "XPMaximo"
+	xpMaximo.Value = 100
+	xpMaximo.Parent = dadosOcultos
+
+	local vidaMaxima = Instance.new("IntValue")
+	vidaMaxima.Name = "VidaMaxima"
+	vidaMaxima.Value = 100
+	vidaMaxima.Parent = dadosOcultos
+
+	local danoBase = Instance.new("IntValue")
+	danoBase.Name = "DanoBase"
+	danoBase.Value = 5
+	danoBase.Parent = dadosOcultos
+
+	local energiaMaxima = Instance.new("IntValue")
+	energiaMaxima.Name = "EnergiaMaxima"
+	energiaMaxima.Value = 100
+	energiaMaxima.Parent = dadosOcultos
+
+	local energiaAtual = Instance.new("IntValue")
+	energiaAtual.Name = "EnergiaAtual"
+	energiaAtual.Value = 100
+	energiaAtual.Parent = dadosOcultos
+
+	local agilidade = Instance.new("IntValue")
+	agilidade.Name = "Agilidade"
+	agilidade.Value = 16
+	agilidade.Parent = dadosOcultos
+
+	local raca = Instance.new("StringValue")
+	raca.Name = "Raca"
+	raca.Value = "Humano"
+	raca.Parent = dadosOcultos
 
 	player.CharacterAdded:Connect(function(character)
 		local dadosLocais = GerenciadorSessao.Obter(player.UserId)
@@ -62,10 +100,12 @@ Players.PlayerAdded:Connect(function(player)
 			tagNome.Value = dadosLocais.Nome
 
 			local tagRaca = dadosOcultos:FindFirstChild("Raca")
-			if tagRaca then tagRaca.Value = dadosLocais.Raca end
+			if tagRaca then
+				tagRaca.Value = dadosLocais.Raca
+			end
 
 			local description = Instance.new("HumanoidDescription")
-			description.HairAccessory = tostring(dadosLocais.Cabelo) 
+			description.HairAccessory = tostring(dadosLocais.Cabelo)
 			description.Shirt = dadosLocais.Camisa
 			description.Pants = dadosLocais.Calca
 			local corTransformada = Color3.fromHex(dadosLocais.CorPele or "#EEC196")
@@ -77,8 +117,10 @@ Players.PlayerAdded:Connect(function(player)
 			description.LeftLegColor = corTransformada
 			description.RightLegColor = corTransformada
 
-			pcall(function() humanoid:ApplyDescription(description) end)
-			atualizarStatus(player) 
+			pcall(function()
+				humanoid:ApplyDescription(description)
+			end)
+			atualizarStatus(player)
 		end
 	end)
 end)
@@ -100,25 +142,47 @@ end)
 
 eventoDeletar.OnServerEvent:Connect(function(player)
 	local chaveDS = tostring(player.UserId)
-	pcall(function() PersonagensDS:RemoveAsync(chaveDS) end)
+	pcall(function()
+		PersonagensDS:RemoveAsync(chaveDS)
+	end)
 	GerenciadorSessao.Remover(player.UserId)
 
 	local tagNome = player:FindFirstChild("NomeFalso")
-	if tagNome then tagNome:Destroy() end
+	if tagNome then
+		tagNome:Destroy()
+	end
 
 	local dadosOcultos = player:FindFirstChild("dadosOcultos")
 	if dadosOcultos then
-		if dadosOcultos:FindFirstChild("Nivel") then dadosOcultos.Nivel.Value = 1 end
-		if dadosOcultos:FindFirstChild("XP") then dadosOcultos.XP.Value = 0 end
-		if dadosOcultos:FindFirstChild("XPMaximo") then dadosOcultos.XPMaximo.Value = 100 end
-		if dadosOcultos:FindFirstChild("VidaMaxima") then dadosOcultos.VidaMaxima.Value = 100 end
-		if dadosOcultos:FindFirstChild("DanoBase") then dadosOcultos.DanoBase.Value = 5 end
-		if dadosOcultos:FindFirstChild("EnergiaMaxima") then dadosOcultos.EnergiaMaxima.Value = 100 end
-		if dadosOcultos:FindFirstChild("EnergiaAtual") then dadosOcultos.EnergiaAtual.Value = 100 end
-		if dadosOcultos:FindFirstChild("Agilidade") then dadosOcultos.Agilidade.Value = 16 end
-		if dadosOcultos:FindFirstChild("Raca") then dadosOcultos.Raca.Value = "Humano" end
+		if dadosOcultos:FindFirstChild("Nivel") then
+			dadosOcultos.Nivel.Value = 1
+		end
+		if dadosOcultos:FindFirstChild("XP") then
+			dadosOcultos.XP.Value = 0
+		end
+		if dadosOcultos:FindFirstChild("XPMaximo") then
+			dadosOcultos.XPMaximo.Value = 100
+		end
+		if dadosOcultos:FindFirstChild("VidaMaxima") then
+			dadosOcultos.VidaMaxima.Value = 100
+		end
+		if dadosOcultos:FindFirstChild("DanoBase") then
+			dadosOcultos.DanoBase.Value = 5
+		end
+		if dadosOcultos:FindFirstChild("EnergiaMaxima") then
+			dadosOcultos.EnergiaMaxima.Value = 100
+		end
+		if dadosOcultos:FindFirstChild("EnergiaAtual") then
+			dadosOcultos.EnergiaAtual.Value = 100
+		end
+		if dadosOcultos:FindFirstChild("Agilidade") then
+			dadosOcultos.Agilidade.Value = 16
+		end
+		if dadosOcultos:FindFirstChild("Raca") then
+			dadosOcultos.Raca.Value = "Humano"
+		end
 	end
-	eventoMenu:FireClient(player, false) 
+	eventoMenu:FireClient(player, false)
 end)
 
 eventoEscolha.OnServerEvent:Connect(function(player, genero)
@@ -126,23 +190,31 @@ eventoEscolha.OnServerEvent:Connect(function(player, genero)
 	local cabeloSorteado = 0
 
 	if genero == "Masculino" then
-		nomeSorteado = ConfigGerais.nomesMasculinos[math.random(1, #ConfigGerais.nomesMasculinos)] .. " " .. ConfigGerais.sobrenomes[math.random(1, #ConfigGerais.sobrenomes)]
+		nomeSorteado = ConfigGerais.nomesMasculinos[math.random(1, #ConfigGerais.nomesMasculinos)]
+			.. " "
+			.. ConfigGerais.sobrenomes[math.random(1, #ConfigGerais.sobrenomes)]
 		cabeloSorteado = ConfigGerais.idsCabeloMasc[math.random(1, #ConfigGerais.idsCabeloMasc)]
 	else
-		nomeSorteado = ConfigGerais.nomesFemininos[math.random(1, #ConfigGerais.nomesFemininos)] .. " " .. ConfigGerais.sobrenomes[math.random(1, #ConfigGerais.sobrenomes)]
+		nomeSorteado = ConfigGerais.nomesFemininos[math.random(1, #ConfigGerais.nomesFemininos)]
+			.. " "
+			.. ConfigGerais.sobrenomes[math.random(1, #ConfigGerais.sobrenomes)]
 		cabeloSorteado = ConfigGerais.idsCabeloFem[math.random(1, #ConfigGerais.idsCabeloFem)]
 	end
 
 	local dadosPersonagem = {
-		Nome = nomeSorteado, Genero = genero, Cabelo = cabeloSorteado,
+		Nome = nomeSorteado,
+		Genero = genero,
+		Cabelo = cabeloSorteado,
 		Camisa = ConfigGerais.idsCamisa[math.random(1, #ConfigGerais.idsCamisa)],
 		Calca = ConfigGerais.idsCalca[math.random(1, #ConfigGerais.idsCalca)],
 		Raca = ConfigGerais.sortearRaca(),
-		CorPele = ConfigGerais.coresPeleHex[math.random(1, #ConfigGerais.coresPeleHex)]
+		CorPele = ConfigGerais.coresPeleHex[math.random(1, #ConfigGerais.coresPeleHex)],
 	}
 
 	GerenciadorSessao.Definir(player.UserId, dadosPersonagem)
-	pcall(function() PersonagensDS:SetAsync(tostring(player.UserId), dadosPersonagem) end)
+	pcall(function()
+		PersonagensDS:SetAsync(tostring(player.UserId), dadosPersonagem)
+	end)
 
 	player:LoadCharacter()
 end)

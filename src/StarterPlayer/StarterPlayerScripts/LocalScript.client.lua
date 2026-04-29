@@ -138,8 +138,9 @@ Players.PlayerAdded:Connect(function(player)
 end)
 
 Players.PlayerRemoving:Connect(function(player)
-	if scrollingFrame:FindFirstChild(player.Name) then
-		scrollingFrame[player.Name]:Destroy()
+	local playerFrame = scrollingFrame:FindFirstChild(player.Name)
+	if playerFrame then
+		playerFrame:Destroy()
 	end
 end)
 

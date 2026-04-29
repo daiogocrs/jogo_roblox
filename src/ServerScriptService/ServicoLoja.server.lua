@@ -21,7 +21,9 @@ local function atualizarStatusVisual(player)
 		dados.DanoBase.Value = atributos.danoBase
 		dados.EnergiaMaxima.Value = atributos.energiaMaxima
 		dados.Agilidade.Value = atributos.agilidade
-		if dados:FindFirstChild("EnergiaAtual") then dados.EnergiaAtual.Value = atributos.energiaMaxima end
+		if dados:FindFirstChild("EnergiaAtual") then
+			dados.EnergiaAtual.Value = atributos.energiaMaxima
+		end
 
 		local humanoid = character.Humanoid
 		humanoid.MaxHealth = atributos.vidaMaxima
@@ -32,40 +34,49 @@ end
 
 MarketplaceService.ProcessReceipt = function(receiptInfo)
 	local player = Players:GetPlayerByUserId(receiptInfo.PlayerId)
-	if not player then return Enum.ProductPurchaseDecision.NotProcessedYet end
+	if not player then
+		return Enum.ProductPurchaseDecision.NotProcessedYet
+	end
 
 	local dadosLocais = GerenciadorSessao.Obter(player.UserId)
-	if not dadosLocais then return Enum.ProductPurchaseDecision.NotProcessedYet end
+	if not dadosLocais then
+		return Enum.ProductPurchaseDecision.NotProcessedYet
+	end
 
 	if receiptInfo.ProductId == ConfigGerais.ID_ROLETAR_NOME then
 		if dadosLocais.Genero == "Masculino" then
-			dadosLocais.Nome = ConfigGerais.nomesMasculinos[math.random(1, #ConfigGerais.nomesMasculinos)] .. " " .. ConfigGerais.sobrenomes[math.random(1, #ConfigGerais.sobrenomes)]
+			dadosLocais.Nome = ConfigGerais.nomesMasculinos[math.random(1, #ConfigGerais.nomesMasculinos)]
+				.. " "
+				.. ConfigGerais.sobrenomes[math.random(1, #ConfigGerais.sobrenomes)]
 		else
-			dadosLocais.Nome = ConfigGerais.nomesFemininos[math.random(1, #ConfigGerais.nomesFemininos)] .. " " .. ConfigGerais.sobrenomes[math.random(1, #ConfigGerais.sobrenomes)]
+			dadosLocais.Nome = ConfigGerais.nomesFemininos[math.random(1, #ConfigGerais.nomesFemininos)]
+				.. " "
+				.. ConfigGerais.sobrenomes[math.random(1, #ConfigGerais.sobrenomes)]
 		end
 
-		local tagNome = player:FindFirstChild("NomeFalso") or Instance.new("StringValue", player)
+		local tagNome = player:FindFirstChild("NomeFalso") or Instance.new("StringValue")
 		tagNome.Name = "NomeFalso"
 		tagNome.Value = dadosLocais.Nome
+		tagNome.Parent = player
 
 		if player.Character and player.Character:FindFirstChild("Humanoid") then
 			player.Character.Humanoid.DisplayName = dadosLocais.Nome
 		end
-
 	elseif receiptInfo.ProductId == ConfigGerais.ID_ROLETAR_RACA then
 		dadosLocais.Raca = ConfigGerais.sortearRaca()
 		local dadosOcultos = player:FindFirstChild("dadosOcultos")
 		if dadosOcultos then
-			local tagRaca = dadosOcultos:FindFirstChild("Raca") or Instance.new("StringValue", dadosOcultos)
+			local tagRaca = dadosOcultos:FindFirstChild("Raca") or Instance.new("StringValue")
 			tagRaca.Name = "Raca"
-			tagRaca.Value = dadosLocais.Raca 
+			tagRaca.Value = dadosLocais.Raca
+			tagRaca.Parent = dadosOcultos
 		end
 		atualizarStatusVisual(player)
 	end
 
 	GerenciadorSessao.Definir(player.UserId, dadosLocais)
-	local sucesso, erro = pcall(function() 
-		PersonagensDS:SetAsync(tostring(player.UserId), dadosLocais) 
+	local sucesso, erro = pcall(function()
+		PersonagensDS:SetAsync(tostring(player.UserId), dadosLocais)
 	end)
 
 	if sucesso then

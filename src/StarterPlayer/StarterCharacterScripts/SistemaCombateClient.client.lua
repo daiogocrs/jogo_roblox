@@ -23,6 +23,8 @@ local idAnimacoes = {
 	Soco5 = "rbxassetid://116840465625849"  
 }
 
+local tracksCarregadas = {}
+
 -- Função para carregar uma animação no personagem
 local function tocarAnimacao(id)
 	local personagem = jogador.Character
@@ -31,10 +33,20 @@ local function tocarAnimacao(id)
 	local animator = humanoid:FindFirstChild("Animator")
 	if not animator then return nil end
 
+	-- Se a animação já foi carregada antes, apenas dá o play!
+	if tracksCarregadas[id] then
+		tracksCarregadas[id]:Play()
+		return tracksCarregadas[id]
+	end
+
+	-- Se não, cria, carrega, salva no cache e dá o play
 	local anim = Instance.new("Animation")
 	anim.AnimationId = id
 	local track = animator:LoadAnimation(anim)
+	
+	tracksCarregadas[id] = track
 	track:Play()
+	
 	return track
 end
 

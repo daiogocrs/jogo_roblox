@@ -1,1 +1,157 @@
-{"name":"teste","className":"DataModel","filePaths":["default.project.json"],"children":[{"name":"ReplicatedStorage","className":"ReplicatedStorage","children":[{"name":"MenuPrincipal","className":"ScreenGui","filePaths":["src/ReplicatedStorage/MenuPrincipal/init.meta.json"],"children":[{"name":"LocalScript","className":"LocalScript","filePaths":["src/ReplicatedStorage/MenuPrincipal/LocalScript.client.lua"]}]},{"name":"ModulosCompartilhados","className":"Folder","children":[{"name":"ConfigGerais","className":"ModuleScript","filePaths":["src/ReplicatedStorage/ModulosCompartilhados/ConfigGerais.lua"]}]}]},{"name":"ServerScriptService","className":"ServerScriptService","children":[{"name":"GeradorPersonagem","className":"Script","filePaths":["src/ServerScriptService/GeradorPersonagem.server.lua"]},{"name":"GerenciadorEnergia","className":"Script","filePaths":["src/ServerScriptService/GerenciadorEnergia.server.lua"]},{"name":"ModulosServidor","className":"Folder","children":[{"name":"GerenciadorSessao","className":"ModuleScript","filePaths":["src/ServerScriptService/ModulosServidor/GerenciadorSessao.lua"]},{"name":"StatusMath","className":"ModuleScript","filePaths":["src/ServerScriptService/ModulosServidor/StatusMath.lua"]}]},{"name":"ServicoDados","className":"Script","filePaths":["src/ServerScriptService/ServicoDados.server.lua"]},{"name":"ServicoLoja","className":"Script","filePaths":["src/ServerScriptService/ServicoLoja.server.lua"]},{"name":"SistemaCombateServer","className":"Script","filePaths":["src/ServerScriptService/SistemaCombateServer.server.lua"]}]},{"name":"StarterGui","className":"StarterGui","children":[{"name":"MenuInGame","className":"ScreenGui","filePaths":["src/StarterGui/MenuInGame/init.meta.json"],"children":[{"name":"LocalScript","className":"LocalScript","filePaths":["src/StarterGui/MenuInGame/LocalScript.client.lua"]}]}]},{"name":"StarterPlayer","className":"StarterPlayer","children":[{"name":"StarterCharacterScripts","className":"StarterCharacterScripts","children":[{"name":"Movimentacao","className":"LocalScript","filePaths":["src/StarterPlayer/StarterCharacterScripts/Movimentacao.client.lua"]},{"name":"SistemaCombateClient","className":"LocalScript","filePaths":["src/StarterPlayer/StarterCharacterScripts/SistemaCombateClient.client.lua"]}]},{"name":"StarterPlayerScripts","className":"StarterPlayerScripts","children":[{"name":"IniciadorMenu","className":"LocalScript","filePaths":["src/StarterPlayer/StarterPlayerScripts/IniciadorMenu.client.lua"]},{"name":"LocalScript","className":"LocalScript","filePaths":["src/StarterPlayer/StarterPlayerScripts/LocalScript.client.lua"]}]}]}]}
+{
+    "name": "teste",
+    "className": "DataModel",
+    "filePaths": [
+        "default.project.json"
+    ],
+    "children": [
+        {
+            "name": "ReplicatedStorage",
+            "className": "ReplicatedStorage",
+            "children": [
+                {
+                    "name": "ModulosCompartilhados",
+                    "className": "Folder",
+                    "children": [
+                        {
+                            "name": "ConfigGerais",
+                            "className": "ModuleScript",
+                            "filePaths": [
+                                "src/ReplicatedStorage/ModulosCompartilhados/ConfigGerais.lua"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "ServerScriptService",
+            "className": "ServerScriptService",
+            "children": [
+                {
+                    "name": "GeradorPersonagem",
+                    "className": "Script",
+                    "filePaths": [
+                        "src/ServerScriptService/GeradorPersonagem.server.lua"
+                    ]
+                },
+                {
+                    "name": "GerenciadorEnergia",
+                    "className": "Script",
+                    "filePaths": [
+                        "src/ServerScriptService/GerenciadorEnergia.server.lua"
+                    ]
+                },
+                {
+                    "name": "ModulosServidor",
+                    "className": "Folder",
+                    "children": [
+                        {
+                            "name": "GerenciadorSessao",
+                            "className": "ModuleScript",
+                            "filePaths": [
+                                "src/ServerScriptService/ModulosServidor/GerenciadorSessao.lua"
+                            ]
+                        },
+                        {
+                            "name": "StatusMath",
+                            "className": "ModuleScript",
+                            "filePaths": [
+                                "src/ServerScriptService/ModulosServidor/StatusMath.lua"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "ServicoDados",
+                    "className": "Script",
+                    "filePaths": [
+                        "src/ServerScriptService/ServicoDados.server.lua"
+                    ]
+                },
+                {
+                    "name": "ServicoLoja",
+                    "className": "Script",
+                    "filePaths": [
+                        "src/ServerScriptService/ServicoLoja.server.lua"
+                    ]
+                },
+                {
+                    "name": "SistemaCombateServer",
+                    "className": "Script",
+                    "filePaths": [
+                        "src/ServerScriptService/SistemaCombateServer.server.lua"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "StarterGui",
+            "className": "StarterGui",
+            "children": [
+                {
+                    "name": "MenuInGame",
+                    "className": "ScreenGui",
+                    "filePaths": [
+                        "src/StarterGui/MenuInGame/init.meta.json"
+                    ],
+                    "children": [
+                        {
+                            "name": "LocalScript",
+                            "className": "LocalScript",
+                            "filePaths": [
+                                "src/StarterGui/MenuInGame/LocalScript.client.lua"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "StarterPlayer",
+            "className": "StarterPlayer",
+            "children": [
+                {
+                    "name": "StarterCharacterScripts",
+                    "className": "StarterCharacterScripts",
+                    "children": [
+                        {
+                            "name": "Movimentacao",
+                            "className": "LocalScript",
+                            "filePaths": [
+                                "src/StarterPlayer/StarterCharacterScripts/Movimentacao.client.lua"
+                            ]
+                        },
+                        {
+                            "name": "SistemaCombateClient",
+                            "className": "LocalScript",
+                            "filePaths": [
+                                "src/StarterPlayer/StarterCharacterScripts/SistemaCombateClient.client.lua"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "StarterPlayerScripts",
+                    "className": "StarterPlayerScripts",
+                    "children": [
+                        {
+                            "name": "IniciadorMenu",
+                            "className": "LocalScript",
+                            "filePaths": [
+                                "src/StarterPlayer/StarterPlayerScripts/IniciadorMenu.client.lua"
+                            ]
+                        },
+                        {
+                            "name": "LocalScript",
+                            "className": "LocalScript",
+                            "filePaths": [
+                                "src/StarterPlayer/StarterPlayerScripts/LocalScript.client.lua"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
