@@ -10,6 +10,22 @@
             "className": "ReplicatedStorage",
             "children": [
                 {
+                    "name": "MenuPrincipal",
+                    "className": "ScreenGui",
+                    "filePaths": [
+                        "src/ReplicatedStorage/MenuPrincipal/init.meta.json"
+                    ],
+                    "children": [
+                        {
+                            "name": "LocalScript",
+                            "className": "LocalScript",
+                            "filePaths": [
+                                "src/ReplicatedStorage/MenuPrincipal/LocalScript.client.luau"
+                            ]
+                        }
+                    ]
+                },
+                {
                     "name": "ModulosCompartilhados",
                     "className": "Folder",
                     "children": [
@@ -17,7 +33,7 @@
                             "name": "ConfigGerais",
                             "className": "ModuleScript",
                             "filePaths": [
-                                "src/ReplicatedStorage/ModulosCompartilhados/ConfigGerais.lua"
+                                "src/ReplicatedStorage/ModulosCompartilhados/ConfigGerais.luau"
                             ]
                         }
                     ]
@@ -32,14 +48,14 @@
                     "name": "GeradorPersonagem",
                     "className": "Script",
                     "filePaths": [
-                        "src/ServerScriptService/GeradorPersonagem.server.lua"
+                        "src/ServerScriptService/GeradorPersonagem.server.luau"
                     ]
                 },
                 {
                     "name": "GerenciadorEnergia",
                     "className": "Script",
                     "filePaths": [
-                        "src/ServerScriptService/GerenciadorEnergia.server.lua"
+                        "src/ServerScriptService/GerenciadorEnergia.server.luau"
                     ]
                 },
                 {
@@ -50,14 +66,14 @@
                             "name": "GerenciadorSessao",
                             "className": "ModuleScript",
                             "filePaths": [
-                                "src/ServerScriptService/ModulosServidor/GerenciadorSessao.lua"
+                                "src/ServerScriptService/ModulosServidor/GerenciadorSessao.luau"
                             ]
                         },
                         {
                             "name": "StatusMath",
                             "className": "ModuleScript",
                             "filePaths": [
-                                "src/ServerScriptService/ModulosServidor/StatusMath.lua"
+                                "src/ServerScriptService/ModulosServidor/StatusMath.luau"
                             ]
                         }
                     ]
@@ -66,21 +82,21 @@
                     "name": "ServicoDados",
                     "className": "Script",
                     "filePaths": [
-                        "src/ServerScriptService/ServicoDados.server.lua"
+                        "src/ServerScriptService/ServicoDados.server.luau"
                     ]
                 },
                 {
                     "name": "ServicoLoja",
                     "className": "Script",
                     "filePaths": [
-                        "src/ServerScriptService/ServicoLoja.server.lua"
+                        "src/ServerScriptService/ServicoLoja.server.luau"
                     ]
                 },
                 {
                     "name": "SistemaCombateServer",
                     "className": "Script",
                     "filePaths": [
-                        "src/ServerScriptService/SistemaCombateServer.server.lua"
+                        "src/ServerScriptService/SistemaCombateServer.server.luau"
                     ]
                 }
             ]
@@ -100,7 +116,7 @@
                             "name": "LocalScript",
                             "className": "LocalScript",
                             "filePaths": [
-                                "src/StarterGui/MenuInGame/LocalScript.client.lua"
+                                "src/StarterGui/MenuInGame/LocalScript.client.luau"
                             ]
                         }
                     ]
@@ -119,14 +135,14 @@
                             "name": "Movimentacao",
                             "className": "LocalScript",
                             "filePaths": [
-                                "src/StarterPlayer/StarterCharacterScripts/Movimentacao.client.lua"
+                                "src/StarterPlayer/StarterCharacterScripts/Movimentacao.client.luau"
                             ]
                         },
                         {
                             "name": "SistemaCombateClient",
                             "className": "LocalScript",
                             "filePaths": [
-                                "src/StarterPlayer/StarterCharacterScripts/SistemaCombateClient.client.lua"
+                                "src/StarterPlayer/StarterCharacterScripts/SistemaCombateClient.client.luau"
                             ]
                         }
                     ]
@@ -139,14 +155,14 @@
                             "name": "IniciadorMenu",
                             "className": "LocalScript",
                             "filePaths": [
-                                "src/StarterPlayer/StarterPlayerScripts/IniciadorMenu.client.lua"
+                                "src/StarterPlayer/StarterPlayerScripts/IniciadorMenu.client.luau"
                             ]
                         },
                         {
                             "name": "LocalScript",
                             "className": "LocalScript",
                             "filePaths": [
-                                "src/StarterPlayer/StarterPlayerScripts/LocalScript.client.lua"
+                                "src/StarterPlayer/StarterPlayerScripts/LocalScript.client.luau"
                             ]
                         }
                     ]
