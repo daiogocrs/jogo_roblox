@@ -49,7 +49,7 @@ end)
 -- Botão de Iniciar
 painelPrincipal.BtnIniciar.MouseButton1Click:Connect(function()
 	if temPersonagem then
-		eventoMenu:FireServer("Iniciar") 
+		eventoMenu:FireServer("Iniciar")
 		conexaoCamera:Disconnect()
 		camera.CameraType = Enum.CameraType.Custom
 		menuGui.Enabled = false
@@ -74,8 +74,12 @@ local function escolherGenero(genero)
 	menuGui.Enabled = false
 end
 
-painelGenero.BtnMasculino.MouseButton1Click:Connect(function() escolherGenero("Masculino") end)
-painelGenero.BtnFeminino.MouseButton1Click:Connect(function() escolherGenero("Feminino") end)
+painelGenero.BtnMasculino.MouseButton1Click:Connect(function()
+	escolherGenero("Masculino")
+end)
+painelGenero.BtnFeminino.MouseButton1Click:Connect(function()
+	escolherGenero("Feminino")
+end)
 
 -- Confirmação do Wipe
 painelConfirmacao.BtnSim.MouseButton1Click:Connect(function()

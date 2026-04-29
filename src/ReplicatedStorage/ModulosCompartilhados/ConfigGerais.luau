@@ -1,7 +1,7 @@
 local ConfigGerais = {}
 
-ConfigGerais.nomesMasculinos = {"Arthur", "Liam", "Noah", "William", "Lucas", "Gabriel"}
-ConfigGerais.nomesFemininos = {"Olivia", "Emma", "Ava", "Sophia", "Julia", "Alice"}
+ConfigGerais.nomesMasculinos = {"Arthur", "Liam", "Noah", "William", "Lucas", "Gabriel", "Guilherme"}
+ConfigGerais.nomesFemininos = {"Olivia", "Emma", "Ava", "Sophia", "Julia", "Alice", "Nunes"}
 ConfigGerais.sobrenomes = {"Silva", "Santos", "Oliveira", "Souza", "Rodrigues", "Smith"}
 
 ConfigGerais.idsCabeloMasc = {376527350, 16630147} 
