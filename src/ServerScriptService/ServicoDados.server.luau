@@ -4,6 +4,16 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ProfileService = require(ReplicatedStorage:WaitForChild("Packages"):WaitForChild("ProfileService"))
 local GerenciadorSessao = require(script.Parent:WaitForChild("ModulosServidor"):WaitForChild("GerenciadorSessao"))
 
+local ServerStorage = game:GetService("ServerStorage")
+
+local FuncoesInternas = ServerStorage:FindFirstChild("FuncoesInternas") or Instance.new("Folder")
+FuncoesInternas.Name = "FuncoesInternas"
+FuncoesInternas.Parent = ServerStorage
+
+local wipeRemote = FuncoesInternas:FindFirstChild("WipeAccount") or Instance.new("BindableFunction")
+wipeRemote.Name = "WipeAccount"
+wipeRemote.Parent = FuncoesInternas
+
 local TemplateDados = {
 	Nome = "Desconhecido",
 	Genero = "Masculino",
@@ -66,6 +76,10 @@ local function WipeAccount(player)
 		for chave, valor in pairs(TemplateDados) do
 			profile.Data[chave] = valor
 		end
+		-- Opcional: Avisar o GerenciadorSessao que os dados mudaram
+		GerenciadorSessao.Definir(player.UserId, profile.Data)
 	end
 end
-_G.WipeAccount = WipeAccount
+
+-- Em vez de _G, conecte ao BindableFunction
+wipeRemote.OnInvoke = WipeAccount
