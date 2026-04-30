@@ -159,21 +159,19 @@ eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 					jogadorInimigo:SetAttribute("Stunned", true)
 				end
 
+				local velocidadeAnterior = humanoidInimigo.WalkSpeed
+				humanoidInimigo.WalkSpeed = 0
+				if jogadorInimigo then
+					jogadorInimigo:SetAttribute("Stunned", true)
+				end
+
 				task.delay(0.3, function()
 					if modeloInimigo:GetAttribute("UltimoStun") == tempoAtual then
 						if humanoidInimigo then
 							if jogadorInimigo then
 								jogadorInimigo:SetAttribute("Stunned", false)
-
-								local dadosOcultos = jogadorInimigo:FindFirstChild("dadosOcultos")
-								if dadosOcultos and dadosOcultos:FindFirstChild("Agilidade") then
-									humanoidInimigo.WalkSpeed = dadosOcultos.Agilidade.Value
-								else
-									humanoidInimigo.WalkSpeed = 16
-								end
-							else
-								humanoidInimigo.WalkSpeed = 16
 							end
+							humanoidInimigo.WalkSpeed = velocidadeAnterior
 						end
 					end
 				end)
