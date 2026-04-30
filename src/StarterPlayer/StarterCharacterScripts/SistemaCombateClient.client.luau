@@ -103,6 +103,10 @@ UserInputService.InputBegan:Connect(function(input, processando)
 			task.wait(0.3)
 		end
 
+		if comboAtual == 5 then
+			task.wait(1.2)
+		end
+
 		comboAtual = comboAtual + 1
 		if comboAtual > 5 then
 			comboAtual = 1
