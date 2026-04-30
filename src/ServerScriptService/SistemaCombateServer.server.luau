@@ -19,6 +19,12 @@ eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 		if type(dados) ~= "boolean" then
 			return
 		end
+
+		local dadosAtacante = player:FindFirstChild("dadosOcultos")
+		if dados == true and dadosAtacante and dadosAtacante.EnergiaAtual.Value < GASTO_ENERGIA_BLOQUEIO then
+			return
+		end
+
 		player:SetAttribute("Bloqueando", dados)
 		return
 	end
@@ -90,11 +96,26 @@ eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 
 				humanoidInimigo:TakeDamage(danoCalculado)
 
-				local velocidadeOriginal = humanoidInimigo.WalkSpeed
 				humanoidInimigo.WalkSpeed = 0
+
+				if jogadorInimigo then
+					jogadorInimigo:SetAttribute("Stunned", true)
+				end
+
 				task.delay(0.3, function()
-					if humanoidInimigo and humanoidInimigo.WalkSpeed == 0 then
-						humanoidInimigo.WalkSpeed = velocidadeOriginal
+					if humanoidInimigo then
+						if jogadorInimigo then
+							jogadorInimigo:SetAttribute("Stunned", false)
+
+							local dadosOcultos = jogadorInimigo:FindFirstChild("dadosOcultos")
+							if dadosOcultos and dadosOcultos:FindFirstChild("Agilidade") then
+								humanoidInimigo.WalkSpeed = dadosOcultos.Agilidade.Value
+							else
+								humanoidInimigo.WalkSpeed = 16
+							end
+						else
+							humanoidInimigo.WalkSpeed = 16
+						end
 					end
 				end)
 			end
