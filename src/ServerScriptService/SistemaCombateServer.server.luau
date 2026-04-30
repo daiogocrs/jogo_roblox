@@ -24,6 +24,9 @@ Players.PlayerRemoving:Connect(function(player)
 	registroCombate[player.UserId] = nil
 end)
 
+local parametrosAtaque = OverlapParams.new()
+parametrosAtaque.FilterType = Enum.RaycastFilterType.Exclude
+
 eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 	local personagem = player.Character
 	if not personagem then
@@ -94,8 +97,10 @@ eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 		parametros.FilterDescendantsInstances = { personagem }
 		parametros.FilterType = Enum.RaycastFilterType.Exclude
 
+		parametrosAtaque.FilterDescendantsInstances = { personagem }
+
 		local posicaoHitbox = raiz.CFrame * CFrame.new(0, 0, -3)
-		local partesAtingidas = workspace:GetPartBoundsInBox(posicaoHitbox, Vector3.new(4, 5, 4), parametros)
+		local partesAtingidas = workspace:GetPartBoundsInBox(posicaoHitbox, Vector3.new(4, 5, 4), parametrosAtaque)
 
 		local inimigosAtingidos = {}
 
@@ -148,8 +153,13 @@ eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 					raizInimigo.AssemblyLinearVelocity = forcaEsmagadora
 				end
 
-				-- Sistema de Stun
 				modeloInimigo:SetAttribute("UltimoStun", tempoAtual)
+				humanoidInimigo.WalkSpeed = 0
+				if jogadorInimigo then
+					jogadorInimigo:SetAttribute("Stunned", true)
+				end
+
+				local velocidadeAnterior = humanoidInimigo.WalkSpeed
 				humanoidInimigo.WalkSpeed = 0
 				if jogadorInimigo then
 					jogadorInimigo:SetAttribute("Stunned", true)
@@ -160,16 +170,8 @@ eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 						if humanoidInimigo then
 							if jogadorInimigo then
 								jogadorInimigo:SetAttribute("Stunned", false)
-
-								local dadosOcultos = jogadorInimigo:FindFirstChild("dadosOcultos")
-								if dadosOcultos and dadosOcultos:FindFirstChild("Agilidade") then
-									humanoidInimigo.WalkSpeed = dadosOcultos.Agilidade.Value
-								else
-									humanoidInimigo.WalkSpeed = 16
-								end
-							else
-								humanoidInimigo.WalkSpeed = 16
 							end
+							humanoidInimigo.WalkSpeed = velocidadeAnterior
 						end
 					end
 				end)
