@@ -58,12 +58,16 @@ Players.PlayerRemoving:Connect(function(player)
 	GerenciadorSessao.Remover(player.UserId)
 end)
 
-local function WipeAccount(player)
+local eventoApagar = Instance.new("BindableEvent")
+eventoApagar.Name = "ApagarDadosConta"
+eventoApagar.Parent = ReplicatedStorage
+
+eventoApagar.Event:Connect(function(player)
 	local profile = Profiles[player]
 	if profile then
 		profile:Release()
 		Profiles[player] = nil
 		ProfileStore:WipeProfileAsync("Player_" .. player.UserId)
+		print("Dados de " .. player.Name .. " apagados com sucesso!")
 	end
-end
-_G.WipeAccount = WipeAccount
+end)

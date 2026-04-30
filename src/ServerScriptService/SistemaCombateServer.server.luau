@@ -9,6 +9,10 @@ local COOLDOWN_ATAQUE = 0.3
 
 local tempoUltimoAtaque = {}
 
+-- MELHORIA DE PERFORMANCE: Criado apenas uma vez fora do evento!
+local parametrosCombate = OverlapParams.new()
+parametrosCombate.FilterType = Enum.RaycastFilterType.Exclude
+
 eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 	local personagem = player.Character
 	if not personagem then
@@ -19,7 +23,19 @@ eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 		if type(dados) ~= "boolean" then
 			return
 		end
-		player:SetAttribute("Bloqueando", dados)
+
+		if dados == true then
+			local pastaOculta = player:FindFirstChild("dadosOcultos")
+			if pastaOculta and pastaOculta:FindFirstChild("EnergiaAtual") then
+				if pastaOculta.EnergiaAtual.Value >= GASTO_ENERGIA_BLOQUEIO then
+					player:SetAttribute("Bloqueando", true)
+				else
+					player:SetAttribute("Bloqueando", false)
+				end
+			end
+		else
+			player:SetAttribute("Bloqueando", false)
+		end
 		return
 	end
 
@@ -44,12 +60,10 @@ eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 			danoDoAtacante = dadosAtacante.DanoBase.Value
 		end
 
-		local parametros = OverlapParams.new()
-		parametros.FilterDescendantsInstances = { personagem }
-		parametros.FilterType = Enum.RaycastFilterType.Exclude
+		parametrosCombate.FilterDescendantsInstances = { personagem }
 
 		local posicaoHitbox = raiz.CFrame * CFrame.new(0, 0, -3)
-		local partesAtingidas = workspace:GetPartBoundsInBox(posicaoHitbox, Vector3.new(4, 5, 4), parametros)
+		local partesAtingidas = workspace:GetPartBoundsInBox(posicaoHitbox, Vector3.new(4, 5, 4), parametrosCombate)
 
 		local inimigosAtingidos = {}
 
@@ -70,7 +84,6 @@ eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 				end
 
 				inimigosAtingidos[modeloInimigo] = true
-
 				local danoCalculado = danoDoAtacante
 				local jogadorInimigo = Players:GetPlayerFromCharacter(modeloInimigo)
 
@@ -90,8 +103,11 @@ eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 
 				humanoidInimigo:TakeDamage(danoCalculado)
 
+				-- MELHORIA DE GAMEPLAY (Hitstun perfeito):
 				local velocidadeOriginal = humanoidInimigo.WalkSpeed
 				humanoidInimigo.WalkSpeed = 0
+				raizInimigo.AssemblyLinearVelocity = Vector3.zero
+
 				task.delay(0.3, function()
 					if humanoidInimigo and humanoidInimigo.WalkSpeed == 0 then
 						humanoidInimigo.WalkSpeed = velocidadeOriginal
@@ -102,7 +118,6 @@ eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 	end
 end)
 
--- Limpa a memória quando o jogador sai
 Players.PlayerRemoving:Connect(function(player)
 	tempoUltimoAtaque[player.UserId] = nil
 end)

@@ -172,8 +172,9 @@ eventoMenu.OnServerEvent:Connect(function(player, acao)
 end)
 
 eventoDeletar.OnServerEvent:Connect(function(player)
-	if _G.WipeAccount then
-		_G.WipeAccount(player)
+	local eventoApagar = ReplicatedStorage:FindFirstChild("ApagarDadosConta")
+	if eventoApagar then
+		eventoApagar:Fire(player)
 	end
 
 	GerenciadorSessao.Remover(player.UserId)
