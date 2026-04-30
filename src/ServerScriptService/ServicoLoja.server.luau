@@ -3,7 +3,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local DataStoreService = game:GetService("DataStoreService")
 
-local PersonagensDS = DataStoreService:GetDataStore("DadosJogadores_V1")
+local PersonagensDS = DataStoreService:GetDataStore("DadosJogadores_V2")
 local ConfigGerais = require(ReplicatedStorage:WaitForChild("ModulosCompartilhados"):WaitForChild("ConfigGerais"))
 local GerenciadorSessao = require(script.Parent:WaitForChild("ModulosServidor"):WaitForChild("GerenciadorSessao"))
 local StatusMath = require(script.Parent:WaitForChild("ModulosServidor"):WaitForChild("StatusMath"))
@@ -75,15 +75,7 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 	end
 
 	GerenciadorSessao.Definir(player.UserId, dadosLocais)
-	local sucesso, erro = pcall(function()
-		PersonagensDS:SetAsync(tostring(player.UserId), dadosLocais)
-	end)
 
-	if sucesso then
-		player:LoadCharacter()
-		return Enum.ProductPurchaseDecision.PurchaseGranted
-	else
-		warn("Falha ao salvar a compra do jogador " .. player.Name .. ". Tentando novamente depois.")
-		return Enum.ProductPurchaseDecision.NotProcessedYet
-	end
+	player:LoadCharacter()
+	return Enum.ProductPurchaseDecision.PurchaseGranted
 end
