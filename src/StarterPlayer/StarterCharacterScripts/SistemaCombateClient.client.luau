@@ -66,7 +66,6 @@ UserInputService.InputBegan:Connect(function(input, processando)
 		return
 	end
 
-	-- Entrar/Sair do Modo Combate (Tecla C)
 	if input.KeyCode == Enum.KeyCode.C then
 		emCombate = not emCombate
 		if emCombate then
@@ -79,20 +78,16 @@ UserInputService.InputBegan:Connect(function(input, processando)
 				trackBloqueio:Stop()
 			end
 			bloqueando = false
-			-- Aqui dizemos ao servidor que paramos de bloquear
 			eventoCombate:FireServer("Bloquear", false)
 		end
 	end
 
-	-- Bloquear (Tecla F)
 	if input.KeyCode == Enum.KeyCode.F and emCombate and not atacando then
 		bloqueando = true
 		trackBloqueio = tocarAnimacao(idAnimacoes.Bloqueio)
-		-- Avisa o servidor que estamos a bloquear
 		eventoCombate:FireServer("Bloquear", true)
 	end
 
-	-- Atacar (Clique Esquerdo)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 and emCombate and not bloqueando and not atacando then
 		atacando = true
 
@@ -103,19 +98,38 @@ UserInputService.InputBegan:Connect(function(input, processando)
 		local idSoco = idAnimacoes["Soco" .. comboAtual]
 		local trackAtaque = tocarAnimacao(idSoco)
 
-		-- Envia o ataque para o servidor processar o dano
 		eventoCombate:FireServer("Ataque", comboAtual)
 		tempoUltimoAtaque = os.clock()
 
-		-- Espera o tempo da animação de forma segura (evita encravar o Input)
-		if trackAtaque and trackAtaque.Length > 0 then
-			task.wait(trackAtaque.Length * 0.9)
+		if trackAtaque then
+			local parado = false
+			local conexao
+
+			conexao = trackAtaque.Stopped:Connect(function()
+				parado = true
+				if conexao then
+					conexao:Disconnect()
+				end
+			end)
+
+			task.delay(1.5, function()
+				if not parado then
+					parado = true
+					if conexao then
+						conexao:Disconnect()
+					end
+				end
+			end)
+
+			repeat
+				task.wait()
+			until parado
 		else
 			task.wait(0.3)
 		end
 
 		if comboAtual == 5 then
-			task.wait(1.2) -- O quinto soco tem um tempo de espera maior
+			task.wait(0.5)
 		end
 
 		comboAtual = comboAtual + 1
@@ -128,18 +142,15 @@ UserInputService.InputBegan:Connect(function(input, processando)
 end)
 
 UserInputService.InputEnded:Connect(function(input, processando)
-	-- Para de bloquear ao soltar o F
 	if input.KeyCode == Enum.KeyCode.F and emCombate then
 		bloqueando = false
 		if trackBloqueio then
 			trackBloqueio:Stop()
 		end
-		-- Avisa o servidor
 		eventoCombate:FireServer("Bloquear", false)
 	end
 end)
 
--- Desliga o bloqueio localmente se a estamina acabar no servidor
 jogador:GetAttributeChangedSignal("Bloqueando"):Connect(function()
 	local bloqueandoNoServidor = jogador:GetAttribute("Bloqueando")
 
