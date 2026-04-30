@@ -161,7 +161,16 @@ end)
 -- ==========================================
 eventoMenu.OnServerEvent:Connect(function(player, acao)
 	if acao == "VerificarConta" then
-		if GerenciadorSessao.Obter(player.UserId) then
+		local dadosSessao = GerenciadorSessao.Obter(player.UserId)
+		local tentativas = 0
+
+		while dadosSessao == nil and tentativas < 50 do
+			task.wait(0.1)
+			dadosSessao = GerenciadorSessao.Obter(player.UserId)
+			tentativas += 1
+		end
+
+		if dadosSessao and dadosSessao.Nome ~= "Desconhecido" then
 			eventoMenu:FireClient(player, true)
 		else
 			eventoMenu:FireClient(player, false)

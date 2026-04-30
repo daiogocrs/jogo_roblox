@@ -3,7 +3,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local DataStoreService = game:GetService("DataStoreService")
 
-local PersonagensDS = DataStoreService:GetDataStore("DadosJogadores_V2")
+local PersonagensDS = DataStoreService:GetDataStore("DadosJogadores_V3")
 local ConfigGerais = require(ReplicatedStorage:WaitForChild("ModulosCompartilhados"):WaitForChild("ConfigGerais"))
 local GerenciadorSessao = require(script.Parent:WaitForChild("ModulosServidor"):WaitForChild("GerenciadorSessao"))
 local StatusMath = require(script.Parent:WaitForChild("ModulosServidor"):WaitForChild("StatusMath"))
