@@ -14,6 +14,7 @@ local function iniciarRegistro(player)
 	registroCombate[player.UserId] = {
 		ultimoAtaque = 0,
 		combo = 1,
+		cooldown = 0,
 	}
 end
 
@@ -60,18 +61,23 @@ eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 
 		local tempoAtual = os.clock()
 
+		if tempoAtual < registro.ultimoAtaque + registro.cooldown then
+			return
+		end
+
 		if tempoAtual - registro.ultimoAtaque > TEMPO_RESET_COMBO then
 			registro.combo = 1
 		end
 
-		local cooldownNecessario = (registro.combo == 5) and 1.5 or COOLDOWN_ATAQUE
+		local hitAtual = registro.combo
 
-		if (tempoAtual - registro.ultimoAtaque) < cooldownNecessario then
-			return
+		if hitAtual == 5 then
+			registro.cooldown = 1.5
+		else
+			registro.cooldown = COOLDOWN_ATAQUE
 		end
 
 		registro.ultimoAtaque = tempoAtual
-		local hitAtual = registro.combo
 
 		local raiz = personagem:FindFirstChild("HumanoidRootPart")
 		if not raiz then
@@ -138,9 +144,11 @@ eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 				if hitAtual == 5 and raizInimigo then
 					local direcaoEmpurrao = (raizInimigo.Position - raiz.Position).Unit
 					local forcaEsmagadora = direcaoEmpurrao * 50 + Vector3.new(0, 20, 0)
+
 					raizInimigo.AssemblyLinearVelocity = forcaEsmagadora
 				end
 
+				-- Sistema de Stun
 				modeloInimigo:SetAttribute("UltimoStun", tempoAtual)
 				humanoidInimigo.WalkSpeed = 0
 				if jogadorInimigo then
