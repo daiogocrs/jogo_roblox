@@ -20,9 +20,17 @@ eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 			return
 		end
 
-		local dadosAtacante = player:FindFirstChild("dadosOcultos")
-		if dados == true and dadosAtacante and dadosAtacante.EnergiaAtual.Value < GASTO_ENERGIA_BLOQUEIO then
-			return
+		if dados == true then
+			if player:GetAttribute("Stunned") == true then
+				return
+			end
+
+			local dadosAtacante = player:FindFirstChild("dadosOcultos")
+			if dadosAtacante and dadosAtacante:FindFirstChild("EnergiaAtual") then
+				if dadosAtacante.EnergiaAtual.Value < GASTO_ENERGIA_BLOQUEIO then
+					return
+				end
+			end
 		end
 
 		player:SetAttribute("Bloqueando", dados)
