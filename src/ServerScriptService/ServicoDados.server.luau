@@ -17,7 +17,7 @@ local TemplateDados = {
 	XPMaximo = 100,
 }
 
-local ProfileStore = ProfileService.GetProfileStore("DadosJogadores_V2", TemplateDados)
+local ProfileStore = ProfileService.GetProfileStore("DadosJogadores", TemplateDados)
 
 local Profiles = {}
 
@@ -51,7 +51,9 @@ Players.PlayerRemoving:Connect(function(player)
 	if profile then
 		local dadosAtuais = GerenciadorSessao.Obter(player.UserId)
 		if dadosAtuais then
-			profile.Data = dadosAtuais
+			for chave, valor in pairs(dadosAtuais) do
+				profile.Data[chave] = valor
+			end
 		end
 		profile:Release()
 	end
@@ -69,5 +71,13 @@ eventoApagar.Event:Connect(function(player)
 		Profiles[player] = nil
 		ProfileStore:WipeProfileAsync("Player_" .. player.UserId)
 		print("Dados de " .. player.Name .. " apagados com sucesso!")
+	end
+end)
+
+game:BindToClose(function()
+	for _, profile in pairs(Profiles) do
+		if profile ~= nil then
+			profile:Release()
+		end
 	end
 end)
