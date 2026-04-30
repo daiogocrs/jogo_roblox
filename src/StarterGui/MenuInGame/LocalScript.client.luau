@@ -99,6 +99,8 @@ end
 -- LÓGICA DO MENU E STATUS DINÂMICO
 -- ==========================================
 
+local menuAberto = false
+
 local function atualizarTextosDeStatus()
 	txtNivel.Text = "Nível: " .. (player:GetAttribute("Nivel") or 1)
 	txtVida.Text = "Vida: " .. (player:GetAttribute("VidaMaxima") or 100)
