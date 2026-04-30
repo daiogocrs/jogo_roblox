@@ -17,7 +17,7 @@ local TemplateDados = {
 	XPMaximo = 100,
 }
 
-local ProfileStore = ProfileService.GetProfileStore("DadosJogadores_V3", TemplateDados)
+local ProfileStore = ProfileService.GetProfileStore("DadosJogadores_V4", TemplateDados)
 
 local Profiles = {}
 
@@ -63,9 +63,9 @@ end)
 local function WipeAccount(player)
 	local profile = Profiles[player]
 	if profile then
-		profile:Release()
-		Profiles[player] = nil
-		ProfileStore:WipeProfileAsync("Player_" .. player.UserId)
+		for chave, valor in pairs(TemplateDados) do
+			profile.Data[chave] = valor
+		end
 	end
 end
 _G.WipeAccount = WipeAccount
