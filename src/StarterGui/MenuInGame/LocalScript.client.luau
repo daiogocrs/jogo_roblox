@@ -8,7 +8,7 @@ local ConfigGerais = require(ReplicatedStorage:WaitForChild("ModulosCompartilhad
 local ID_ROLETAR_NOME = ConfigGerais.ID_ROLETAR_NOME
 local ID_ROLETAR_RACA = ConfigGerais.ID_ROLETAR_RACA
 
--- Paineis 
+-- Paineis
 local painelOpcoes = script.Parent:WaitForChild("PainelOpcoes")
 local painelGamepasses = script.Parent:WaitForChild("PainelGamepasses")
 local painelStatus = script.Parent:WaitForChild("PainelStatus")
@@ -26,7 +26,7 @@ local txtNivel = painelStatus:WaitForChild("TxtNivel")
 local txtVida = painelStatus:WaitForChild("TxtVida")
 local txtEnergia = painelStatus:WaitForChild("TxtEnergia")
 local txtDano = painelStatus:WaitForChild("TxtDano")
-local txtAgilidade = painelStatus:WaitForChild("TxtAgilidade") 
+local txtAgilidade = painelStatus:WaitForChild("TxtAgilidade")
 local txtRaca = painelStatus:WaitForChild("TxtRaca")
 
 local menuAberto = false
@@ -44,7 +44,7 @@ local function aplicarEstilo(item)
 		item.BackgroundTransparency = 0.45
 		item.AnchorPoint = Vector2.new(0.5, 0.5)
 		item.Position = UDim2.new(0.5, 0, 0.5, 0)
-		item.Size = UDim2.new(0, 300, 0, 0) 
+		item.Size = UDim2.new(0, 300, 0, 0)
 		item.AutomaticSize = Enum.AutomaticSize.Y
 
 		if not item:FindFirstChild("UICorner") then
@@ -64,7 +64,7 @@ local function aplicarEstilo(item)
 	end
 
 	if item:IsA("TextButton") or item:IsA("TextLabel") then
-		item.Size = UDim2.new(1, 0, 0, 45) 
+		item.Size = UDim2.new(1, 0, 0, 45)
 
 		if item:IsA("TextButton") then
 			item.BackgroundColor3 = corFundoBotao
@@ -74,13 +74,13 @@ local function aplicarEstilo(item)
 				canto.Parent = item
 			end
 		else
-			item.BackgroundTransparency = 1 
+			item.BackgroundTransparency = 1
 		end
 
 		item.TextColor3 = corTexto
 		item.Font = fontePadrao
-		item.TextScaled = false 
-		item.TextSize = 22 
+		item.TextScaled = false
+		item.TextSize = 22
 
 		if not item:FindFirstChild("UIStroke") then
 			local borda = Instance.new("UIStroke")
@@ -98,27 +98,23 @@ end
 -- ==========================================
 -- LÓGICA DO MENU E STATUS DINÂMICO
 -- ==========================================
-local dadosOcultos = player:WaitForChild("dadosOcultos")
 
 local function atualizarTextosDeStatus()
-	if dadosOcultos then
-		txtNivel.Text = "Nível: " .. (dadosOcultos:FindFirstChild("Nivel") and dadosOcultos.Nivel.Value or 1)
-		txtVida.Text = "Vida Máx: " .. (dadosOcultos:FindFirstChild("VidaMaxima") and dadosOcultos.VidaMaxima.Value or 100)
-		txtEnergia.Text = "Energia Máx: " .. (dadosOcultos:FindFirstChild("EnergiaMaxima") and dadosOcultos.EnergiaMaxima.Value or 100)
-		txtDano.Text = "Dano Base: " .. (dadosOcultos:FindFirstChild("DanoBase") and dadosOcultos.DanoBase.Value or 5)
-		txtAgilidade.Text = "Agilidade: " .. (dadosOcultos:FindFirstChild("Agilidade") and dadosOcultos.Agilidade.Value or 16)
-		txtRaca.Text = "Raça: " .. (dadosOcultos:FindFirstChild("Raca") and dadosOcultos.Raca.Value or "Humano")
-	end
+	txtNivel.Text = "Nível: " .. (player:GetAttribute("Nivel") or 1)
+	txtVida.Text = "Vida: " .. (player:GetAttribute("VidaMaxima") or 100)
+
+	local energiaAtual = player:GetAttribute("EnergiaAtual") or 100
+	local energiaMax = player:GetAttribute("EnergiaMaxima") or 100
+	txtEnergia.Text = "Energia: " .. math.floor(energiaAtual) .. "/" .. energiaMax
+
+	txtDano.Text = "Dano: " .. (player:GetAttribute("DanoBase") or 5)
+	txtAgilidade.Text = "Agilidade: " .. (player:GetAttribute("Agilidade") or 16)
+	txtRaca.Text = "Raça: " .. (player:GetAttribute("Raca") or "Humano")
 end
 
--- NOVIDADE: Cria um espião em CADA status do jogador (Vida, Dano, Raça, etc.)
-for _, tag in pairs(dadosOcultos:GetChildren()) do
-	tag.Changed:Connect(atualizarTextosDeStatus)
-end
--- Se algum status novo for criado depois, ele também ganha um espião!
-dadosOcultos.ChildAdded:Connect(function(tag)
-	tag.Changed:Connect(atualizarTextosDeStatus)
-end)
+player.AttributeChanged:Connect(atualizarTextosDeStatus)
+
+atualizarTextosDeStatus()
 
 UserInputService.InputBegan:Connect(function(input, processou)
 	if not processou and input.KeyCode == Enum.KeyCode.M then

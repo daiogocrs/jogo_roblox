@@ -37,12 +37,7 @@ eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 			return
 		end
 
-		local dadosAtacante = player:FindFirstChild("dadosOcultos")
-		local danoDoAtacante = 5
-
-		if dadosAtacante and dadosAtacante:FindFirstChild("DanoBase") then
-			danoDoAtacante = dadosAtacante.DanoBase.Value
-		end
+		local danoDoAtacante = player:GetAttribute("DanoBase") or 5
 
 		local parametros = OverlapParams.new()
 		parametros.FilterDescendantsInstances = { personagem }
@@ -77,12 +72,14 @@ eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 				if jogadorInimigo and jogadorInimigo:GetAttribute("Bloqueando") == true then
 					danoCalculado = danoDoAtacante * REDUCAO_BLOQUEIO
 
-					local pastaOculta = jogadorInimigo:FindFirstChild("dadosOcultos")
-					if pastaOculta and pastaOculta:FindFirstChild("EnergiaAtual") then
-						local energiaAtual = pastaOculta.EnergiaAtual.Value
-						pastaOculta.EnergiaAtual.Value = math.max(0, energiaAtual - GASTO_ENERGIA_BLOQUEIO)
+					local energiaAtual = jogadorInimigo:GetAttribute("EnergiaAtual")
 
-						if pastaOculta.EnergiaAtual.Value == 0 then
+					if energiaAtual then
+						-- Reduz a energia baseada no gasto de bloqueio
+						jogadorInimigo:SetAttribute("EnergiaAtual", math.max(0, energiaAtual - GASTO_ENERGIA_BLOQUEIO))
+
+						-- Se a energia zerar, quebra o bloqueio
+						if jogadorInimigo:GetAttribute("EnergiaAtual") == 0 then
 							jogadorInimigo:SetAttribute("Bloqueando", false)
 						end
 					end

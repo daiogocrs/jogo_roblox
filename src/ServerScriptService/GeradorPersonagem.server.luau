@@ -37,54 +37,12 @@ end
 -- CARREGAMENTO DO BONECO
 -- ==========================================
 Players.PlayerAdded:Connect(function(player)
-	local dadosOcultos = Instance.new("Folder")
-	dadosOcultos.Name = "dadosOcultos"
-	dadosOcultos.Parent = player
-
-	local nivel = Instance.new("IntValue")
-	nivel.Name = "Nivel"
-	nivel.Value = 1
-	nivel.Parent = dadosOcultos
-
-	local xp = Instance.new("IntValue")
-	xp.Name = "XP"
-	xp.Value = 0
-	xp.Parent = dadosOcultos
-
-	local xpMaximo = Instance.new("IntValue")
-	xpMaximo.Name = "XPMaximo"
-	xpMaximo.Value = 100
-	xpMaximo.Parent = dadosOcultos
-
-	local vidaMaxima = Instance.new("IntValue")
-	vidaMaxima.Name = "VidaMaxima"
-	vidaMaxima.Value = 100
-	vidaMaxima.Parent = dadosOcultos
-
-	local danoBase = Instance.new("IntValue")
-	danoBase.Name = "DanoBase"
-	danoBase.Value = 5
-	danoBase.Parent = dadosOcultos
-
-	local energiaMaxima = Instance.new("IntValue")
-	energiaMaxima.Name = "EnergiaMaxima"
-	energiaMaxima.Value = 100
-	energiaMaxima.Parent = dadosOcultos
-
-	local energiaAtual = Instance.new("IntValue")
-	energiaAtual.Name = "EnergiaAtual"
-	energiaAtual.Value = 100
-	energiaAtual.Parent = dadosOcultos
-
-	local agilidade = Instance.new("IntValue")
-	agilidade.Name = "Agilidade"
-	agilidade.Value = 16
-	agilidade.Parent = dadosOcultos
-
-	local raca = Instance.new("StringValue")
-	raca.Name = "Raca"
-	raca.Value = "Humano"
-	raca.Parent = dadosOcultos
+	player:SetAttribute("Raca", dadosLocais.Raca)
+	player:SetAttribute("VidaMaxima", 100)
+	player:SetAttribute("EnergiaAtual", 100)
+	player:SetAttribute("EnergiaMaxima", 100)
+	player:SetAttribute("DanoBase", 5)
+	player:SetAttribute("Agilidade", 16)
 
 	local function sincronizarSessao(nomeTag, valor)
 		local dadosSessao = GerenciadorSessao.Obter(player.UserId)
