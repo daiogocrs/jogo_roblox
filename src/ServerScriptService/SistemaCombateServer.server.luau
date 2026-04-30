@@ -38,13 +38,19 @@ eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 	end
 
 	if acao == "Ataque" then
+		local comboHit = type(dados) == "number" and dados or 1
+
 		local tempoAtual = os.clock()
 		local ultimoAtaque = tempoUltimoAtaque[player.UserId] or 0
 
-		if (tempoAtual - ultimoAtaque) < COOLDOWN_ATAQUE then
+		local cooldownNecessario = (player:GetAttribute("UltimoCombo") == 5) and 1.5 or COOLDOWN_ATAQUE
+
+		if (tempoAtual - ultimoAtaque) < cooldownNecessario then
 			return
 		end
+
 		tempoUltimoAtaque[player.UserId] = tempoAtual
+		player:SetAttribute("UltimoCombo", comboHit)
 
 		local raiz = personagem:FindFirstChild("HumanoidRootPart")
 		if not raiz then
@@ -53,7 +59,6 @@ eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 
 		local dadosAtacante = player:FindFirstChild("dadosOcultos")
 		local danoDoAtacante = 5
-
 		if dadosAtacante and dadosAtacante:FindFirstChild("DanoBase") then
 			danoDoAtacante = dadosAtacante.DanoBase.Value
 		end
@@ -86,6 +91,11 @@ eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 				inimigosAtingidos[modeloInimigo] = true
 
 				local danoCalculado = danoDoAtacante
+
+				if comboHit == 5 then
+					danoCalculado = danoCalculado * 1.5
+				end
+
 				local jogadorInimigo = Players:GetPlayerFromCharacter(modeloInimigo)
 
 				if jogadorInimigo and jogadorInimigo:GetAttribute("Bloqueando") == true then
@@ -104,8 +114,14 @@ eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 
 				humanoidInimigo:TakeDamage(danoCalculado)
 
-				humanoidInimigo.WalkSpeed = 0
+				if comboHit == 5 and raizInimigo then
+					local direcaoEmpurrao = (raizInimigo.Position - raiz.Position).Unit
+					local forcaEsmagadora = direcaoEmpurrao * 50 + Vector3.new(0, 20, 0)
 
+					raizInimigo.AssemblyLinearVelocity = forcaEsmagadora
+				end
+
+				humanoidInimigo.WalkSpeed = 0
 				if jogadorInimigo then
 					jogadorInimigo:SetAttribute("Stunned", true)
 				end

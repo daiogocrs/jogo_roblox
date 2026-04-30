@@ -87,17 +87,20 @@ while task.wait(0.1) do
 	for userId, cache in pairs(cacheEnergia) do
 		local energia = cache.Atual
 		local maxEnergia = cache.Maxima
+		local player = Players:GetPlayerByUserId(userId)
 
 		if jogadoresCorrendo[userId] then
 			energia.Value = math.max(0, energia.Value - 1)
 
-			if energia.Value == 0 then
+			if energia.Value == 0 and player then
 				jogadoresCorrendo[userId] = false
+				eventoEnergia:FireClient(player, "SemEnergia")
+			end
+		elseif player and player:GetAttribute("Bloqueando") == true then
+			energia.Value = math.max(0, energia.Value - 1)
 
-				local player = Players:GetPlayerByUserId(userId)
-				if player then
-					eventoEnergia:FireClient(player, "SemEnergia")
-				end
+			if energia.Value == 0 then
+				player:SetAttribute("Bloqueando", false)
 			end
 		else
 			if energia.Value < maxEnergia.Value then
