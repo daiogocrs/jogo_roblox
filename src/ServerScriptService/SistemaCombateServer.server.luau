@@ -6,8 +6,22 @@ local ALCANCE_SOCO = 5
 local REDUCAO_BLOQUEIO = 0.2
 local GASTO_ENERGIA_BLOQUEIO = 15
 local COOLDOWN_ATAQUE = 0.3
+local TEMPO_RESET_COMBO = 1.2
 
-local tempoUltimoAtaque = {}
+local registroCombate = {}
+
+local function iniciarRegistro(player)
+	registroCombate[player.UserId] = {
+		ultimoAtaque = 0,
+		combo = 1,
+	}
+end
+
+Players.PlayerAdded:Connect(iniciarRegistro)
+
+Players.PlayerRemoving:Connect(function(player)
+	registroCombate[player.UserId] = nil
+end)
 
 eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 	local personagem = player.Character
@@ -38,19 +52,26 @@ eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 	end
 
 	if acao == "Ataque" then
-		local comboHit = type(dados) == "number" and dados or 1
+		local registro = registroCombate[player.UserId]
+		if not registro then
+			iniciarRegistro(player)
+			registro = registroCombate[player.UserId]
+		end
 
 		local tempoAtual = os.clock()
-		local ultimoAtaque = tempoUltimoAtaque[player.UserId] or 0
 
-		local cooldownNecessario = (player:GetAttribute("UltimoCombo") == 5) and 1.5 or COOLDOWN_ATAQUE
+		if tempoAtual - registro.ultimoAtaque > TEMPO_RESET_COMBO then
+			registro.combo = 1
+		end
 
-		if (tempoAtual - ultimoAtaque) < cooldownNecessario then
+		local cooldownNecessario = (registro.combo == 5) and 1.5 or COOLDOWN_ATAQUE
+
+		if (tempoAtual - registro.ultimoAtaque) < cooldownNecessario then
 			return
 		end
 
-		tempoUltimoAtaque[player.UserId] = tempoAtual
-		player:SetAttribute("UltimoCombo", comboHit)
+		registro.ultimoAtaque = tempoAtual
+		local hitAtual = registro.combo
 
 		local raiz = personagem:FindFirstChild("HumanoidRootPart")
 		if not raiz then
@@ -92,7 +113,7 @@ eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 
 				local danoCalculado = danoDoAtacante
 
-				if comboHit == 5 then
+				if hitAtual == 5 then
 					danoCalculado = danoCalculado * 1.5
 				end
 
@@ -114,40 +135,42 @@ eventoCombate.OnServerEvent:Connect(function(player, acao, dados)
 
 				humanoidInimigo:TakeDamage(danoCalculado)
 
-				if comboHit == 5 and raizInimigo then
+				if hitAtual == 5 and raizInimigo then
 					local direcaoEmpurrao = (raizInimigo.Position - raiz.Position).Unit
 					local forcaEsmagadora = direcaoEmpurrao * 50 + Vector3.new(0, 20, 0)
-
 					raizInimigo.AssemblyLinearVelocity = forcaEsmagadora
 				end
 
+				modeloInimigo:SetAttribute("UltimoStun", tempoAtual)
 				humanoidInimigo.WalkSpeed = 0
 				if jogadorInimigo then
 					jogadorInimigo:SetAttribute("Stunned", true)
 				end
 
 				task.delay(0.3, function()
-					if humanoidInimigo then
-						if jogadorInimigo then
-							jogadorInimigo:SetAttribute("Stunned", false)
+					if modeloInimigo:GetAttribute("UltimoStun") == tempoAtual then
+						if humanoidInimigo then
+							if jogadorInimigo then
+								jogadorInimigo:SetAttribute("Stunned", false)
 
-							local dadosOcultos = jogadorInimigo:FindFirstChild("dadosOcultos")
-							if dadosOcultos and dadosOcultos:FindFirstChild("Agilidade") then
-								humanoidInimigo.WalkSpeed = dadosOcultos.Agilidade.Value
+								local dadosOcultos = jogadorInimigo:FindFirstChild("dadosOcultos")
+								if dadosOcultos and dadosOcultos:FindFirstChild("Agilidade") then
+									humanoidInimigo.WalkSpeed = dadosOcultos.Agilidade.Value
+								else
+									humanoidInimigo.WalkSpeed = 16
+								end
 							else
 								humanoidInimigo.WalkSpeed = 16
 							end
-						else
-							humanoidInimigo.WalkSpeed = 16
 						end
 					end
 				end)
 			end
 		end
-	end
-end)
 
--- Limpa a memória quando o jogador sai
-Players.PlayerRemoving:Connect(function(player)
-	tempoUltimoAtaque[player.UserId] = nil
+		registro.combo = registro.combo + 1
+		if registro.combo > 5 then
+			registro.combo = 1
+		end
+	end
 end)

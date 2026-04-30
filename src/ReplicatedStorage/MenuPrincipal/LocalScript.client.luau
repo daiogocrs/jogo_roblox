@@ -16,7 +16,6 @@ local eventoDeletar = ReplicatedStorage:WaitForChild("DeletarPersonagem")
 
 local temPersonagem = false
 
--- Fundo transparente por código para a câmera aparecer
 painelPrincipal.BackgroundTransparency = 1
 painelGenero.BackgroundTransparency = 1
 painelConfirmacao.BackgroundTransparency = 1
@@ -34,7 +33,6 @@ local function esconderTudo()
 	painelConfirmacao.Visible = false
 end
 
--- Recebe a resposta do Servidor
 eventoMenu.OnClientEvent:Connect(function(possuiConta)
 	esconderTudo()
 	painelPrincipal.Visible = true
@@ -46,7 +44,6 @@ eventoMenu.OnClientEvent:Connect(function(possuiConta)
 	end
 end)
 
--- Botão de Iniciar
 painelPrincipal.BtnIniciar.MouseButton1Click:Connect(function()
 	if temPersonagem then
 		eventoMenu:FireServer("Iniciar")
@@ -59,7 +56,6 @@ painelPrincipal.BtnIniciar.MouseButton1Click:Connect(function()
 	end
 end)
 
--- CORREÇÃO: O Evento de Clique do Botão Wipe!
 if painelPrincipal:FindFirstChild("BtnWipe") then
 	painelPrincipal.BtnWipe.MouseButton1Click:Connect(function()
 		esconderTudo()
@@ -81,14 +77,12 @@ painelGenero.BtnFeminino.MouseButton1Click:Connect(function()
 	escolherGenero("Feminino")
 end)
 
--- Confirmação do Wipe
 painelConfirmacao.BtnSim.MouseButton1Click:Connect(function()
 	painelConfirmacao.BtnSim.Text = "Deletando..."
 	eventoDeletar:FireServer()
 
 	task.wait(1)
 
-	-- Reseta a interface para o estado de "nova conta"
 	painelConfirmacao.BtnSim.Text = "SIM"
 	temPersonagem = false
 	if painelPrincipal:FindFirstChild("BtnWipe") then
